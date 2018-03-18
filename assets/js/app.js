@@ -6,12 +6,15 @@ $(document).ready(function() {
     let lon = "";
     let onLoadSeatGeekQuery = "";
 
-    // if session is still running, don't ask for GeoLocation, else ask for the GeoLocation
+    // if session is still running, don't ask for GeoLocation, and store the lon and lat variables so that we can use it in the query. Then call the function with the GET method
     if(sessionStorage.getItem("lat") !== null && sessionStorage.getItem("lon") !== null) {
         lat = sessionStorage.getItem("lat");
         lon = sessionStorage.getItem("lon");
         onLoadSeatGeekQuery = "https://api.seatgeek.com/2/events?lat=" + lat + "&lon=" + lon + "&range=20mi&client_id=OTM3ODIzNHwxNTA4ODAxNzUyLjY0";
-    } else {
+        seatGeekApiCall(onLoadSeatGeekQuery);
+    } 
+    // else ask for the GeoLocation
+    else {
         geoFindMe();
     }
     
@@ -58,6 +61,7 @@ $(document).ready(function() {
         navigator.geolocation.getCurrentPosition(success, error);
     }
     console.log("lat: " + lat);
+    console.log("lon: " + lon);
 
     // function that will display the data on the home page based on the user's geolocation
     function seatGeekApiCall(query){
@@ -65,7 +69,7 @@ $(document).ready(function() {
             url: query,
             type: 'GET'
         }).done(function(data) {
-            
+            console.log(data);
             displaySeatGeekEvent(data, "events");
         })
     }
