@@ -5,25 +5,129 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Hungry Spectator 2.0</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    <script src="main.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" media="screen" href="main.css" /> -->
+    <!-- <script src="main.js"></script> -->
 
     <!-- Bootstrap CDN -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <!-- NavBar -->
-    <nav class="navbar narbar-exand-lg navbar" id="navbar-whole" style="background-color: #8bd6ba;">
+    <nav class="navbar navbar-exand-lg navbar" id="navbar-whole" style="background-color: #8bd6ba;">
         <div class="container">
 
             <h1>
-                
+                <img src="assets/images/binoculars.png" alt="smallbinoculars">
+                <a class="navbar-brand" href="#" style="color: black;">The Hungry Spectator 2.0</a>
             </h1>
-        </div>
 
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+                <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="index.html" style="color: black;">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" style="color: black;">About Us<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" style="color: black;">Contact Us</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </nav>
+
+    <!-- jumbotron -->
+    <div class="jumbotron" style="background-color: #FF9933;">
+        <div class="container text-center">
+
+            <img src="assets/images/logo.png" alt="binoculars-man" class="img-thumbnail animated zoomInDown" id="logo">
+            <h1 class="text-center"><i aria-hidden="true"></i> The Hungry Spectator</h1>
+            <h6 class="text-center">Finding sporting events, concerts and food in your area</h6>
+            <hr class="bg-white">
+
+            <div class="row">
+                <!-- column for drop down box -->
+                <div class="col-md-2 offset-md-2 offset-sm-0 test">
+                    <!-- drop down box has default of select type and 3 other options -->
+                    <select class="custom-select eventEndpoint" aria-labelledby="dropdownMenu2" style="color: grey">
+                        <option value="default" selected>Select type</option>
+                        <option value="events">Event</option>
+                        <option value="events">Artist</option>
+                        <option value="events">Venue</option>
+                    </select>
+                </div>
+
+                <!-- column for search bar -->
+                <div class="col-md-6">
+                    <form action="">
+                        <div class="input-group">
+                            <!-- input box for the search bar -->
+                            <input type="text" id="search-term" class="form-control" placeholder="Search...">
+                            <!-- this span is for the search button with the font awesome picture of magnifying glass as the button -->
+                            <span class="input-group-addon" id="search-icon">
+                                <button class="btn btn-outline-dark btn-search-event">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+             <!-- Sidebar section which is 3 columns with bootstrap grid -->
+             <aside class="col-md-3 primary-sidebar-content">
+                <div class="card">
+                    <div class="card-header" style="color: white; background-color: #8bd6ba">
+                        Popular Events
+                    </div>
+
+                    <div class="card-body text-center" style="background-color: #d3d3d3;">
+                        <button class="btn btn-primary btn-sm btn-sports" data-name="nfl">NFL</button>
+                        <button class="btn btn-primary btn-sm btn-sports" data-name="nba">NBA</button>
+                        <button class="btn btn-primary btn-sm btn-sports" data-name="nhl">NHL</button>
+                        <button class="btn btn-primary btn-sm btn-sports" data-name="mlb">MLB</button>
+                        <button class="btn btn-primary btn-sm btn-sports" data-name="rock">Rock</button>
+                        <button class="btn btn-primary btn-sm btn-sports" data-name="pop">Pop</button>
+                        <button class="btn btn-primary btn-sm btn-sports" data-name="hip-hop">Hip-Hop</button>
+                        <button class="btn btn-primary btn-sm btn-sports" data-name="country">Country</button>
+                        <button class="btn btn-primary btn-sm btn-sports" data-name="concerts">Concerts</button>
+                        <button class="btn btn-primary btn-sm btn-sports" data-name="theater">Theater</button>
+                        <button class="btn btn-primary btn-sm btn-sports" data-name="ncaab">NCAAB</button>
+                        <button class="btn btn-primary btn-sm btn-sports" data-name="ncaaf">NCAAF</button>
+                    </div>
+                </div>
+             </aside>
+
+             <!-- main section for content which is 9 columns w/bootstrap grid -->
+             <section class="col-md-9 primary-content">
+                 <!-- data from API goes here -->
+             </section>
+        </div>
+    </div>
+
+    <!-- Jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+
+    <!-- javascript for the app -->
+    <script src="assets/js/app.js"></script>
 </body>
 </html>
