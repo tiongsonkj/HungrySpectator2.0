@@ -34,6 +34,28 @@ $(document).ready(function() {
             seatGeekApiCall(onLoadSeatGeekQuery);
             return;
         }
+        // If user clicks on "Allow", save "latitude" and "longitude" to session storage of your browser 
+        function success(position){
+            sessionStorage.setItem("lat", position.coords.latitude);
+            sessionStorage.setItem("lon", position.coords.longitude);
+            lat = sessionStorage.getItem("lat");
+            lon = sessionStorage.getItem("lon");
+            onLoadSeatGeekQuery = "https://api.seatgeek.com/2/events?lat=" + lat + "&lon=" + lon + "&range=20mi&client_id=OTM3ODIzNHwxNTA4ODAxNzUyLjY0";
+            // Function to display data on home page (with user's geolocation)
+            seatGeekApiCall(onLoadSeatGeekQuery);
+        }
+        // If user click on "Block", save default "latitude" and "longitude" to session storage of your browser
+        function error(){
+            sessionStorage.setItem("lat", "41.881832");
+            sessionStorage.setItem("lon", "-87.623177");
+            lat = sessionStorage.getItem("lat");
+            lon = sessionStorage.getItem("lon");
+            onLoadSeatGeekQuery = "https://api.seatgeek.com/2/events?lat=" + lat + "&lon=" + lon + "&range=20mi&client_id=OTM3ODIzNHwxNTA4ODAxNzUyLjY0";
+            // Function to display data on home page (with default geolocation)
+            seatGeekApiCall(onLoadSeatGeekQuery);
+        }
+        // get the current position based on the success and error functions
+        navigator.geolocation.getCurrentPosition(success, error);
     }
     console.log("lat: " + lat);
 
