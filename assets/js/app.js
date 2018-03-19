@@ -123,8 +123,8 @@ $(document).ready(function() {
                     cardHeader.html(data.events[i].title);
 
                     // add the venue name of the event, datetime of the event which is formatted in moment, and the venue address in the html of contentColumn
-                    // contentColumn.html(data.events[i].venue.name + " - " + moment(data.events[i].datetime_local).format("MMMM Do YYYY, h:mm:ss a") + 
-                    // "<br>" + data.events[i].venue.address + ", " + data.events[i].venue.extended_address + "<br>");
+                    contentColumn.html(data.events[i].venue.name + " - " + moment(data.events[i].datetime_local).format("MMMM Do YYYY, h:mm:ss a") + 
+                    "<br>" + data.events[i].venue.address + ", " + data.events[i].venue.extended_address + "<br>");
                 }
                 // else if the eventType is "performers"...
                 else if(eventType === "performers"){
@@ -201,5 +201,139 @@ $(document).ready(function() {
         card.append(cardBody);
 
         $(".primary-content").append(card);
+    }
+
+    // function for onclick of the html element that has class btn-more-info
+    $(document.body).on("click", ".btn-more-info", function(){
+        // empty the primary content on the page
+        $(".primary-content").html('');
+
+        // grab the event id and store it to the value
+        const eventID = $(this).attr("record-id");
+        const eventType = $(this).attr("event-type");
+
+        // url query for specific seat geek event
+        const sgEventURL = "https://api.seatgeek.com/2/" + eventType + "/" + eventID + "?client_id=OTM3ODIzNHwxNTA4ODAxNzUyLjY0";
+
+        // ajax call to GET the information from the API
+        $.ajax({
+            url: sgEventURL,
+            method: "GET"
+        }).done(function(response){
+            // store the data into variables
+            var eventName = response.title;
+            console.log(response);
+            var eventCard = $("<div class='card'></div>");
+            var eventCardHeader = $("<div class='card-header' style='background-color:#8bd6ba; color: white;'></div>");
+            var eventCardBody = $("<div class='card-body'style='background-color:#d3d3d3'></div>");
+
+            /* first row of the card */
+            var eventCardRow = $("<div class='row'></div>");
+
+            var eventCardImageColumn = $("<div class='col-md-2'></div>");
+            var eventImg = $("<img class='rounded' width='100px' height='100px'>");
+            
+            var eventCardContentColumn = $("<div class='col-md-10'></div>");
+            var eventStreetLocation = $("<h5></h5>");
+            var eventStreetAddress = $("<h5></h5>");
+            var hr = $("<hr>");
+            var heading = $("<h4>Price Information</h4>");
+            var price = $("<p></p>");
+            var eventButton = $("<a class='btn btn-secondary' target='_blank'>Grab Tickets!</a>");
+
+            if(eventType === "events"){
+                if(response.performers[0].image !== null){
+                    eventImg.attr("src", response.performers[0].image);
+                } else {
+                    eventImg.attr("src", "assets/images/logo.jpeg");
+                }
+
+                eventButton.attr("href", response.url);
+                eventCardHeader.html(response.title);
+                eventStreetLocation.html(response.venue.name + " - " + moment(response.datetime_local).format("MMMM Do YYYY, h:mm:ss a"));
+                eventStreetAddress.html(response.venue.address + ", " + response.venue.extended_address);
+
+                var averagePrice = checkNull(response.stats.average_price);
+                var highestPrice = checkNull(response.stats.highest_price);
+                var listingCount = checkNull(response.stats.listing_count);
+                var lowestPrice = checkNull(response.stats.lowest_price);
+                var goodDeals = checkNull(response.stats.lowest_price_good_deals);
+
+                price.html("<strong>Average Price : " + averagePrice + "<br>" +
+                           "Highest Price : " + highestPrice + "<br>" + 
+                           "Listing Count : " + listingCount + "<br>" + 
+                           "Lowest Price : " + lowestPrice + "<br>" + 
+                           "Lowest Price Good Deals : " + goodDeals + "</strong><br>");
+            } else if (eventType === "venues") {
+            }
+
+            /* appending everything into the card */
+            eventCardImageColumn.append(eventImg);
+            eventCardContentColumn.append(eventStreetLocation);
+            eventCardContentColumn.append(eventStreetAddress);
+            eventCardContentColumn.append(hr);
+            eventCardContentColumn.append(heading);
+            eventCardContentColumn.append(price);
+            eventCardContentColumn.append(eventButton);
+
+            eventCardRow.append(eventCardImageColumn);
+            eventCardRow.append(eventCardContentColumn);
+
+            eventCardBody.append(eventCardRow);
+            eventCard.append(eventCardHeader);
+            eventCard.append(eventCardBody);
+
+            /* add the event card into the primary content container */
+            $(".primary-content").html(eventCard);
+
+            // call the function displayMap and displayWeather to display those two on the page
+            // display map will take in two parameters, which are the lattitude and longitude of the venue's location
+            displayMap(response.venue.location.lat, response.venue.location.lon);
+            // displayWeather(response.datetime_local, response.venue.location.lat, response.venue.location.lon);
+        });
+    });
+
+    // what to do if one of the stats from the response is missing
+    function checkNull(param){
+        if(param === null)
+            return "N/A";
+        else
+            return "$ " + param;
+    }
+
+    // function that will display the map of the location
+    function displayMap(lat, lon){
+        // create the card
+        var row = $("<div class='row weather-map'></div>");
+        var mapColumn = $("<div class='col-md-8'></div>");
+        var mapCard = $("<div class='card map-card'></div>");
+        var mapCardHeader = $("<div class='card-header text-white' style='background-color:#8bd6ba;'>Map</div>");
+        var mapCardBody = $("<div class='card-body map-holder' id='map-area'></div>");
+
+        // append everything together
+        mapCard.append(mapCardHeader);
+        mapCard.append(mapCardBody);
+        mapColumn.append(mapCard);
+
+        row.append(mapColumn);
+        $(".primary-content").append(row);
+
+        // call the initMap function using the lat and lon parameters
+        initMap(lat, lon);
+    }
+
+    // function that will initialize the map
+    function initMap(lat, lon){
+        const geoLocation = {lat: lat, lng: lon};
+        const map = new google.maps.Map(document.getElementById('map-area'), {
+            zoom: 15,
+            center: geoLocation
+        });
+
+        // marker for the position of the venue on the map
+        var marker = new google.maps.Marker({
+            position: geoLocation,
+            map: map
+        });
     }
 });
