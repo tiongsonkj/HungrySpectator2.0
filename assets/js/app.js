@@ -289,7 +289,7 @@ $(document).ready(function() {
             // call the function displayMap and displayWeather to display those two on the page
             // display map will take in two parameters, which are the lattitude and longitude of the venue's location
             displayMap(response.venue.location.lat, response.venue.location.lon);
-            // displayWeather(response.datetime_local, response.venue.location.lat, response.venue.location.lon);
+            displayWeather(response.datetime_local, response.venue.location.lat, response.venue.location.lon);
         });
     });
 
@@ -334,6 +334,43 @@ $(document).ready(function() {
         var marker = new google.maps.Marker({
             position: geoLocation,
             map: map
+        });
+    }
+
+    function displayWeather(date, lat, lon){
+        var weatherQuery = "https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/e319b7a02841ce79f4c9eba2f95edae6/" + lat +"," + lon + "," + date + "?exclude=hourly,daily,minutely,flags";
+        var weatherColumn = $("<div class='col-md-4'></div>");
+        var weatherCard = $("<div class='card map-card'></div>");
+        var weatherCardHeader = $("<div class='card-header text-white' style='background-color:#8bd6ba;'>Weather</div>");
+        var weatherCardBody = $("<div class='card-body text-center' id='weather-area' style='background-color:#d3d3d3'></div>");
+
+        var weatherIcon = $("<img class='img-fluid weather-icon'></h3>");
+        var weatherSummary = $("<h4></h4>");
+        var weatherTemprature = $("<p></p>");
+        var weatherHumidity = $("<p></p>");
+
+        $.ajax({
+            url: weatherQuery,
+            method: 'GET'
+        }).done(function(response){
+            console.log("Here is the response of the dark sky API: ");
+            console.log(response);
+            weatherIcon.attr("src", "assets/images/" + response.currently.icon + ".png");
+            weatherSummary.html(response.currently.summary);
+            var celcius = (parseFloat(response.currently.temperature) - 32 ) * 5/9 ;
+            weatherTemprature.html("<strong>" + response.currently.temperature + " &#176;F / " + celcius.toFixed(2) +" &#176;C" + "</strong>");
+            weatherHumidity.html("Humidity : " + response.currently.humidity);
+
+            weatherCardBody.append(weatherIcon);
+            weatherCardBody.append(weatherSummary);
+            weatherCardBody.append(weatherTemprature);
+            weatherCardBody.append(weatherHumidity);
+
+            weatherCard.append(weatherCardHeader);
+            weatherCard.append(weatherCardBody);
+
+            weatherColumn.append(weatherCard);
+            $(".weather-map").append(weatherColumn);
         });
     }
 });

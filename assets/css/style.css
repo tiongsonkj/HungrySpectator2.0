@@ -2,3 +2,9 @@
 #navbar-brand{
 	background-color: #8bd6ba;
 }
+
+/* More Info  */
+#map-area,
+#weather-area{
+	height: 300px;
+}
